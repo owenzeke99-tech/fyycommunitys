@@ -1,0 +1,247 @@
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+
+local correctKey = "FyyCommunityKeySystem - Gdieoejdidoidoeoeojdjdj"
+local linkGetKey = "https://link4m.org/6Y1aLg"
+local keyFileName = "FyyCommunity_KeySave.txt"
+local keyDuration = 86400 -- 86400 giây = 24 giờ
+
+-- ================= Key Saving System ================= --
+local function checkSavedKey()
+    local success, result = pcall(function()
+        if writefile and readfile and isfile and isfile(keyFileName) then
+            local savedTime = tonumber(readfile(keyFileName))
+            if savedTime and (os.time() - savedTime < keyDuration) then
+                return true
+            end
+        end
+        return false
+    end)
+    return success and result
+end
+
+local function saveKey()
+    pcall(function()
+        if writefile then
+            writefile(keyFileName, tostring(os.time()))
+        end
+    end)
+end
+
+-- Tự động vượt qua bảng Key nếu đã lưu trong vòng 24h
+if checkSavedKey() then
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/napun87/stealanegg/refs/heads/main/fly.lua"))()
+    end)
+    if not success then
+        warn("Lỗi khi tải script chính: " .. tostring(err))
+    else
+        return 
+    end
+end
+
+-- ================= Start UI Creation ================= --
+if CoreGui:FindFirstChild("FyyModernKeySystem") then
+    CoreGui.FyyModernKeySystem:Destroy()
+end
+
+local KeySystem = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local MainCorner = Instance.new("UICorner")
+local MainStroke = Instance.new("UIStroke")
+local Title = Instance.new("TextLabel")
+local KeyInput = Instance.new("TextBox")
+local InputCorner = Instance.new("UICorner")
+local CheckBtn = Instance.new("TextButton")
+local CheckCorner = Instance.new("UICorner")
+local GetKeyBtn = Instance.new("TextButton")
+local GetKeyCorner = Instance.new("UICorner")
+local StatusLabel = Instance.new("TextLabel")
+
+-- Setup KeySystem
+KeySystem.Name = "FyyModernKeySystem"
+KeySystem.Parent = CoreGui
+KeySystem.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Setup MainFrame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = KeySystem
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 12, 20)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.Size = UDim2.new(0, 360, 0, 180)
+MainFrame.Active = true
+MainFrame.Draggable = true 
+
+MainCorner.CornerRadius = UDim.new(0, 12)
+MainCorner.Parent = MainFrame
+
+MainStroke.Parent = MainFrame
+MainStroke.Color = Color3.fromRGB(120, 60, 200) 
+MainStroke.Thickness = 1.5
+
+-- Setup Title
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1.000
+Title.Position = UDim2.new(0, 0, 0, 10)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Fyy Community"
+Title.TextColor3 = Color3.fromRGB(230, 230, 250) 
+Title.TextSize = 20
+
+-- Setup KeyInput
+KeyInput.Name = "KeyInput"
+KeyInput.Parent = MainFrame
+KeyInput.BackgroundColor3 = Color3.fromRGB(25, 20, 35)
+KeyInput.Position = UDim2.new(0.5, -150, 0, 55)
+KeyInput.Size = UDim2.new(0, 300, 0, 40)
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.PlaceholderText = " Enter your key here..."
+KeyInput.PlaceholderColor3 = Color3.fromRGB(120, 110, 140)
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.TextSize = 14
+KeyInput.ClearTextOnFocus = false
+
+InputCorner.CornerRadius = UDim.new(0, 8)
+InputCorner.Parent = KeyInput
+
+-- Setup Check Key Button
+CheckBtn.Name = "CheckBtn"
+CheckBtn.Parent = MainFrame
+CheckBtn.BackgroundColor3 = Color3.fromRGB(105, 30, 180)
+CheckBtn.Position = UDim2.new(0.5, -150, 0, 110)
+CheckBtn.Size = UDim2.new(0, 140, 0, 35)
+CheckBtn.Font = Enum.Font.GothamBold
+CheckBtn.Text = "Check Key"
+CheckBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckBtn.TextSize = 14
+CheckBtn.AutoButtonColor = false
+
+CheckCorner.CornerRadius = UDim.new(0, 8)
+CheckCorner.Parent = CheckBtn
+
+-- Setup Get Key Button
+GetKeyBtn.Name = "GetKeyBtn"
+GetKeyBtn.Parent = MainFrame
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(45, 30, 70) 
+GetKeyBtn.Position = UDim2.new(0.5, 10, 0, 110)
+GetKeyBtn.Size = UDim2.new(0, 140, 0, 35)
+GetKeyBtn.Font = Enum.Font.GothamBold
+GetKeyBtn.Text = "Get Key"
+GetKeyBtn.TextColor3 = Color3.fromRGB(230, 230, 250)
+GetKeyBtn.TextSize = 14
+GetKeyBtn.AutoButtonColor = false
+
+GetKeyCorner.CornerRadius = UDim.new(0, 8)
+GetKeyCorner.Parent = GetKeyBtn
+
+-- Setup Status Label
+StatusLabel.Name = "StatusLabel"
+StatusLabel.Parent = MainFrame
+StatusLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+StatusLabel.BackgroundTransparency = 1.000
+StatusLabel.Position = UDim2.new(0, 0, 0, 155)
+StatusLabel.Size = UDim2.new(1, 0, 0, 20)
+StatusLabel.Font = Enum.Font.GothamMedium
+StatusLabel.Text = ""
+StatusLabel.TextColor3 = Color3.fromRGB(255, 85, 85)
+StatusLabel.TextSize = 13
+
+-- ================= Smooth Hover Animations ================= --
+local function addHoverEffect(button, normalColor, hoverColor)
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
+    end)
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = normalColor}):Play()
+    end)
+end
+
+addHoverEffect(CheckBtn, Color3.fromRGB(105, 30, 180), Color3.fromRGB(130, 50, 220))
+addHoverEffect(GetKeyBtn, Color3.fromRGB(45, 30, 70), Color3.fromRGB(70, 45, 105))
+
+-- ================= Smooth Shake Animation ================= --
+local function shakeUI()
+    local originalPos = MainFrame.Position 
+    local t = 0.05 
+    local style = Enum.EasingStyle.Sine
+    local dir = Enum.EasingDirection.InOut
+
+    TweenService:Create(MainFrame, TweenInfo.new(t, style, dir), {Position = originalPos + UDim2.new(0, 15, 0, 0)}):Play()
+    task.wait(t)
+    TweenService:Create(MainFrame, TweenInfo.new(t, style, dir), {Position = originalPos - UDim2.new(0, 15, 0, 0)}):Play()
+    task.wait(t)
+    TweenService:Create(MainFrame, TweenInfo.new(t, style, dir), {Position = originalPos + UDim2.new(0, 8, 0, 0)}):Play()
+    task.wait(t)
+    TweenService:Create(MainFrame, TweenInfo.new(t, style, dir), {Position = originalPos - UDim2.new(0, 8, 0, 0)}):Play()
+    task.wait(t)
+    TweenService:Create(MainFrame, TweenInfo.new(t, style, dir), {Position = originalPos}):Play()
+end
+
+-- ================= Button Click Functions ================= --
+CheckBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(CheckBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 135, 0, 32)}):Play()
+    task.wait(0.1)
+    TweenService:Create(CheckBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 140, 0, 35)}):Play()
+
+    if KeyInput.Text == correctKey then
+        StatusLabel.TextColor3 = Color3.fromRGB(85, 255, 127) 
+        StatusLabel.Text = "Valid key! Loading script..."
+        
+        saveKey()
+        
+        task.wait(1.5)
+        
+        TweenService:Create(MainFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+        TweenService:Create(MainStroke, TweenInfo.new(0.5), {Transparency = 1}):Play()
+        
+        for _, child in pairs(MainFrame:GetChildren()) do
+            if child:IsA("GuiObject") then
+                TweenService:Create(child, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+                if child:IsA("TextLabel") or child:IsA("TextBox") or child:IsA("TextButton") then
+                    TweenService:Create(child, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+                end
+            end
+        end
+        task.wait(0.5)
+        KeySystem:Destroy()
+        
+        -- Gọi script chính an toàn
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/napun87/stealanegg/refs/heads/main/fly.lua"))()
+        end)
+        if not success then
+            warn("Không thể chạy script chính: " .. tostring(err))
+        end
+    else
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 85, 85) 
+        StatusLabel.Text = "Invalid Key! Please try again."
+        
+        KeyInput.Text = "" 
+        shakeUI() 
+        
+        task.wait(2)
+        StatusLabel.Text = ""
+    end
+end)
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(GetKeyBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 135, 0, 32)}):Play()
+    task.wait(0.1)
+    TweenService:Create(GetKeyBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 140, 0, 35)}):Play()
+
+    if setclipboard then
+        setclipboard(linkGetKey)
+        StatusLabel.TextColor3 = Color3.fromRGB(170, 170, 255)
+        StatusLabel.Text = "Copied Get Key link to clipboard!"
+    else
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 170, 127)
+        StatusLabel.Text = "Executor does not support auto-copy."
+    end
+    task.wait(3)
+    StatusLabel.Text = ""
+end)
